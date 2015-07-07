@@ -1,0 +1,30 @@
+{
+  "name": "uavcoverage",
+  "description": "Calculates output values for UAV camera configurations",
+  "keywords": [
+    "uav",
+    "camera"
+  ],
+  "version": "0.1.0",
+  "homepage": "https://github.com/prodec/uavcoverage",
+  "license": "MIT",
+  "contributors": [
+    {
+      "name": "Vitor Capela",
+      "email": "vitor@prodec.com.br",
+      "url": "http://troikatech.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prodec/uavcoverage.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "gulp-babel": "~5.1.0",
+    "gulp": "~3.9.0",
+    "gulp-jsdoc": "~0.1.4"
+  }
+}
