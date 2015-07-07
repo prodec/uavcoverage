@@ -25,6 +25,7 @@
   "devDependencies": {
     "gulp-babel": "~5.1.0",
     "gulp": "~3.9.0",
-    "gulp-jsdoc": "~0.1.4"
+    "gulp-jsdoc": "~0.1.4",
+    "quickcheck": "0.0.4"
   }
 }

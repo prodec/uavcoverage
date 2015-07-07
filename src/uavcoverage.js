@@ -1,3 +1,5 @@
+import Vector from "vector";
+
 /**
  * @typedef Dimensions
  * @type {object}
@@ -54,6 +56,14 @@ let UAVCoverage = {
       motionBlurCentimeters: motionBlurCentimeters(settings),
       motionBlurPixels: motionBlurPixels(settings)
     };
+  },
+
+  coverLine(settings, lineString) {
+
+  },
+
+  coverRectangle(settings, rectangle) {
+
   }
 };
 

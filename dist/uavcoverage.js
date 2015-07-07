@@ -1,3 +1,15 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var _vector = require("vector");
+
+var _vector2 = _interopRequireDefault(_vector);
+
 /**
  * @typedef Dimensions
  * @type {object}
@@ -36,11 +48,6 @@
  * @property {number} motionBlurPixels - motion blur in pixels.
  */
 
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 var UAVCoverage = {
   /**
    * Computes output characteristics for images taken with the
@@ -59,7 +66,11 @@ var UAVCoverage = {
       motionBlurCentimeters: motionBlurCentimeters(settings),
       motionBlurPixels: motionBlurPixels(settings)
     };
-  }
+  },
+
+  coverLine: function coverLine(settings, lineString) {},
+
+  coverRectangle: function coverRectangle(settings, rectangle) {}
 };
 
 function captureInterval(settings) {
