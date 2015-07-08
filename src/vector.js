@@ -5,14 +5,18 @@ class Vector {
   }
 
   add(v) {
-    return new Vector(this.x + s.x, this.y + s.y);
+    return new Vector(this.x + v.x, this.y + v.y);
   }
 
-  product(v) {
+  subtract(v) {
+    return new Vector(this.x - v.x, this.y - v.y);
+  }
+
+  multiply(v) {
     return new Vector(this.x * v.x, this.y * v.y);
   }
 
-  productScalar(s) {
+  multiplyScalar(s) {
     return new Vector(this.x * s, this.y * s);
   }
 
@@ -30,6 +34,30 @@ class Vector {
 
   norm() {
     return Math.sqrt(this.x * this.x + this.y * this.y);
+  }
+
+  normalize() {
+    let n = norm();
+
+    return (n > 0 ? this.divideScalar(n) : this);
+  }
+
+  distanceToLine(v0, v1) {
+    let ref = this.subtract(v0),
+        refLength = ref.norm();
+
+    if (refLength == 0.0) {
+      return { distance: 0.0, angle: 0.0 };
+    }
+
+    let a = v1.subtract(v0),
+        b = ref.divideScalar(refLength),
+        na = a.norm(),
+        cosAng = a.divideScalar(na).multiply(b),
+        dist = refLength * Math.sqrt(Math.abs(1.0 - cosAng * cosAng)),
+        ang  = (cosAng * refLength) / na;
+
+    return { distance: dist, angle: ang };
   }
 }
 

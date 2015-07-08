@@ -19,7 +19,12 @@ var Vector = (function () {
   _createClass(Vector, [{
     key: "add",
     value: function add(v) {
-      return new Vector(this.x + s.x, this.y + s.y);
+      return new Vector(this.x + v.x, this.y + v.y);
+    }
+  }, {
+    key: "subtract",
+    value: function subtract(v) {
+      return new Vector(this.x - v.x, this.y - v.y);
     }
   }, {
     key: "product",
@@ -50,6 +55,32 @@ var Vector = (function () {
     key: "norm",
     value: function norm() {
       return Math.sqrt(this.x * this.x + this.y * this.y);
+    }
+  }, {
+    key: "normalize",
+    value: function normalize() {
+      var n = norm();
+
+      return n > 0 ? this.divideScalar(n) : this;
+    }
+  }, {
+    key: "distanceToLine",
+    value: function distanceToLine(v0, v1) {
+      var ref = this.subtract(v0),
+          refLength = ref.norm();
+
+      if (refLength == 0.0) {
+        return { distance: 0.0, angle: 0.0 };
+      }
+
+      var a = v1.subtract(v0),
+          b = ref.divideScalar(refLength),
+          na = a.norm(),
+          cosAng = a.divideScalar(na).multiply(b),
+          dist = refLength * Math.sqrt(Math.abs(1.0 - cosAng * cosAng)),
+          ang = cosAng * refLength / na;
+
+      return { distance: dist, angle: ang };
     }
   }]);
 
