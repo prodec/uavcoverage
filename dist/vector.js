@@ -27,13 +27,13 @@ var Vector = (function () {
       return new Vector(this.x - v.x, this.y - v.y);
     }
   }, {
-    key: "product",
-    value: function product(v) {
-      return new Vector(this.x * v.x, this.y * v.y);
+    key: "multiply",
+    value: function multiply(v) {
+      return this.x * v.x + this.y * v.y;
     }
   }, {
-    key: "productScalar",
-    value: function productScalar(s) {
+    key: "multiplyScalar",
+    value: function multiplyScalar(s) {
       return new Vector(this.x * s, this.y * s);
     }
   }, {
@@ -81,6 +81,11 @@ var Vector = (function () {
           ang = cosAng * refLength / na;
 
       return { distance: dist, angle: ang };
+    }
+  }, {
+    key: "toString",
+    value: function toString() {
+      return "(`this.x`, `this.y`)";
     }
   }]);
 

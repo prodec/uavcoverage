@@ -4,11 +4,17 @@ var babel = require("babel/register");
 var jsdoc = require("gulp-jsdoc");
 var mocha = require("gulp-mocha");
 
-gulp.task("default", function() {
+function buildJs() {
+
+}
+
+gulp.task("build", function() {
   return gulp.src("src/**/*.js")
     .pipe(gulpBabel())
     .pipe(gulp.dest("dist"));
 });
+
+gulp.task("default", ["build"]);
 
 gulp.task("docs", function() {
   return gulp.src("src/**/*.js")
@@ -19,9 +25,12 @@ gulp.task("docs", function() {
 gulp.task("test", function() {
   return gulp.src("test/**/*.js")
     .pipe(mocha({
-      reporter: "nyan",
       compilers: {
         js: babel
       }
     }));
+});
+
+gulp.task("watch-test", function() {
+  gulp.watch(["src/**/*.js", "test/**/*.js"], ["test"]);
 });

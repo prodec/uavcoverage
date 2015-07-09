@@ -13,7 +13,7 @@ class Vector {
   }
 
   multiply(v) {
-    return new Vector(this.x * v.x, this.y * v.y);
+    return (this.x * v.x) + (this.y * v.y);
   }
 
   multiplyScalar(s) {
@@ -58,6 +58,10 @@ class Vector {
         ang  = (cosAng * refLength) / na;
 
     return { distance: dist, angle: ang };
+  }
+
+  toString() {
+    return "(`this.x`, `this.y`)";
   }
 }
 
