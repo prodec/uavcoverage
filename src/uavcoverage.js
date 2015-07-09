@@ -1,4 +1,4 @@
-import Vector from "vector";
+import Vector from "./vector";
 
 /**
  * @typedef Dimensions
@@ -59,11 +59,23 @@ let UAVCoverage = {
   },
 
   coverLine(settings, lineString) {
+    let config     = UAVCoverage.compute(settings),
+        lineLength = lineStringLength(lineString),
+        vectors    = coordinatesToVertices(lineString["coordinates"]),
+        pairs      = pairWise(vectors),
+        imageCount = Math.floor(lineLength / config.imageIntervalMeters),
+        images     = pairs.reduce(coverArea(config), []);
 
+    return { config: lineLength, images: images };
   },
 
   coverRectangle(settings, rectangle) {
+    let config = UAVCoverage.compute(settings),
+        lineLength = rectangleAsLineString(rectangle);
 
+    let coverage = {};
+
+    return coverage;
   }
 };
 
@@ -158,5 +170,77 @@ function footprint(settings) {
 
   return { width: width, height: height };
 }
+
+function lineStringLength(lineString) {
+  let vs = coordinatesToVertices(lineString["coordinates"]),
+      pairs = pairWise(vs);
+
+  return pairs.reduce(((d, p) => d + distance(p[0], p[1])), 0);
+}
+
+function rectangleAsLineString(rectangle) {
+
+}
+
+let EARTH_RADIUS = 6378137; // in meters
+
+function distance(v0, v1) {
+  let dx = degreesToRadians(v1.x) - degreesToRadians(v0.x),
+      dy = degreesToRadians(v1.y) - degreesToRadians(v0.y),
+      a  = Math.pow(Math.sin(dy / 2.0), 2) + Math.cos(degreesToRadians(v0.y)) *
+        Math.cos(degreesToRadians(v1.y)) * Math.pow(Math.sin(dx / 2.0), 2),
+      c  = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return c * EARTH_RADIUS;
+}
+
+function pairWise(xs) {
+  let pairs = [];
+
+  if (xs.length > 1) {
+    for (let i = 0; i < xs.length - 1; i++) {
+      pairs.push([xs[i], xs[i + 1]]);
+    }
+  }
+
+  return pairs;
+}
+
+function degreesToRadians(d) {
+  return d * (Math.PI / 180.0);
+}
+
+function radiansToDegrees(r) {
+  return r * (180 / Math.PI);
+}
+
+function coordinatesToVertices(vs) {
+  return vs.map(c => new Vector(c[0], c[1]));
+}
+
+function coverArea(config) {
+  return (images, vs) => {
+    let [v0, v1] = vs,
+        dist     = distance(v0, v1),
+        accDist  = 0.0,
+        bearing  = bearing(v0, v1);
+
+    while ((accDist + config.imageIntervalMeters) < dist) {
+      images.push({});
+      accDist += config.imageIntervalMeters;
+    }
+
+    return images;
+  };
+}
+
+function bearing(v0, v1) {
+  let y = Math.sin(v1.x - v2.x) * Math.cos(v1.y),
+      x = Math.cos(v0.y) * Math.sin(v1.y) -
+        Math.sin(v0.y) * Math.cos(v1.y) * Math.cos(v1.x - v0.x);
+
+  return radiansToDegrees(Math.atan2(y, x));
+}
+
 
 export default UAVCoverage;
