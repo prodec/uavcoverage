@@ -223,10 +223,16 @@ function coverArea(config) {
     let [v0, v1] = vs,
         dist     = distance(v0, v1),
         accDist  = 0.0,
-        bearing  = bearing(v0, v1);
+        b        = bearing(v0, v1),
+        dir      = v1.subtract(v0);
 
     while ((accDist + config.imageIntervalMeters) < dist) {
-      images.push({});
+      // TODO: Offsets in terms of Proj4
+      let a = dir.multiplyScalar(metersToDegrees(v0.y, accDist));
+      let v = v0.add(a);
+
+      images.push({ center: { x: v.x, y: v.y }, bearing: b });
+
       accDist += config.imageIntervalMeters;
     }
 
@@ -235,12 +241,17 @@ function coverArea(config) {
 }
 
 function bearing(v0, v1) {
-  let y = Math.sin(v1.x - v2.x) * Math.cos(v1.y),
+  let y = Math.sin(v1.x - v0.x) * Math.cos(v1.y),
       x = Math.cos(v0.y) * Math.sin(v1.y) -
         Math.sin(v0.y) * Math.cos(v1.y) * Math.cos(v1.x - v0.x);
 
   return radiansToDegrees(Math.atan2(y, x));
 }
 
+let KM_PER_DEGREE = 111.320;
+function metersToDegrees(latitude, meters) {
+  console.log(latitude, meters);
+  return meters / (KM_PER_DEGREE * Math.cos(latitude * (Math.PI / 180)));
+}
 
 export default UAVCoverage;
