@@ -43,6 +43,10 @@ console.log(UAVCoverage.compute(settings));
 Rodando:
 
 ``` shell
+$ npm install gulp -g
+$ npm install
+$ gulp 
+
 $ node examples/basic.js
 { groundPixelSize: 1.3989508601010865,
   imageOverlapMeters: 52.33000570683163,
