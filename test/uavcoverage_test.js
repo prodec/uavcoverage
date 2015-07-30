@@ -1,6 +1,8 @@
 import UAVCoverage from "../src/uavcoverage";
 import assert from "assert";
 import qc from "quickcheck";
+import { distance } from "../src/geometry";
+import Vector from "../src/vector";
 
 describe("UAVCoverage", () => {
   describe("camera settings", () => {
@@ -29,9 +31,19 @@ describe("UAVCoverage", () => {
         [-44.313197306673, -20.13628916929075]
       ]
     };
+    let covered = coverLine(defaultSettings(), lineString),
+        images = covered.images,
+        coveredLength = 0.0;
 
-    assert.equal(16, (coverLine(defaultSettings(), lineString).images.length));
+    for (let i = 0; i < images.length - 2; i++) {
+      let v0 = new Vector(images[i].center.x, images[i].center.y),
+          v1 = new Vector(images[i + 1].center.x, images[i + 1].center.y);
 
+      coveredLength += distance(v0, v1);
+    }
+
+    assert.equal(17, (covered.images.length));
+    assert(coveredLength <= covered.flightLength);
   });
 
   function defaultSettings(options = {}) {

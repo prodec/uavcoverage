@@ -37,7 +37,7 @@ class Vector {
   }
 
   normalize() {
-    let n = norm();
+    let n = this.norm();
 
     return (n > 0 ? this.divideScalar(n) : this);
   }

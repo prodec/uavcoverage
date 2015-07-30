@@ -67,7 +67,7 @@ let UAVCoverage = {
         imageCount = Math.floor(lineLength / config.imageIntervalMeters),
         images     = pairs.reduce(coverArea(config), []);
 
-    return { config: lineLength, images: images };
+    return { config, images, flightLength: lineLength };
   },
 
   coverRectangle(settings, rectangle) {
@@ -205,10 +205,9 @@ function coverArea(config) {
         dist     = distance(v0, v1),
         accDist  = 0.0,
         b        = bearing(v0, v1),
-        dir      = v1.subtract(v0);
+        dir      = v1.subtract(v0).normalize();
 
-    while ((accDist + config.imageIntervalMeters) < dist) {
-      // TODO: Offsets in terms of Proj4
+    while (accDist < dist) {
       let a = dir.multiplyScalar(metersToDegrees(v0.y, accDist));
       let v = v0.add(a);
 

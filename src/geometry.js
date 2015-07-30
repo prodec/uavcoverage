@@ -28,5 +28,5 @@ export function bearing(v0, v1) {
 
 let KM_PER_DEGREE = 111.320;
 export function metersToDegrees(latitude, meters) {
-  return meters / (KM_PER_DEGREE * Math.cos(latitude * (Math.PI / 180)));
+  return (meters / 1000) / (KM_PER_DEGREE * Math.cos(latitude * (Math.PI / 180)));
 }
