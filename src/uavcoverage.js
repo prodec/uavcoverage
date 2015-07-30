@@ -67,7 +67,7 @@ let UAVCoverage = {
         imageCount = Math.floor(lineLength / config.imageIntervalMeters),
         images     = pairs.reduce(coverArea(config), []);
 
-    return { config, images, flightLength: lineLength };
+    return { config, images, flightLength: lineLength, path: lineString };
   },
 
   coverRectangle(settings, rectangle) {
@@ -211,12 +211,37 @@ function coverArea(config) {
       let a = dir.multiplyScalar(metersToDegrees(v0.y, accDist));
       let v = v0.add(a);
 
-      images.push({ center: { x: v.x, y: v.y }, bearing: b });
+      images.push({
+        center: { x: v.x, y: v.y },
+        bearing: b,
+        bounds: bounds(v, config.footprint)
+      });
 
       accDist += config.imageIntervalMeters;
     }
 
     return images;
+  };
+}
+
+function bounds(center, { width, height }) {
+  // The 0.93 below fixes some level of shittiness in
+  // metersToDegrees. It will probably more prudent/safer to define this in
+  // terms of WebMercator.
+  let heightDegrees = metersToDegrees(center.y, height * 0.93) / 2.0,
+      widthDegrees = metersToDegrees(center.y, width) / 2.0,
+      topLeft = center.add(new Vector(-widthDegrees, heightDegrees)),
+      topRight = center.add(new Vector(widthDegrees, heightDegrees)),
+      bottomRight = center.add(new Vector(widthDegrees, -heightDegrees)),
+      bottomLeft = center.add(new Vector(-widthDegrees, -heightDegrees));
+
+  return {
+    type: "Polygon",
+    coordinates: [[
+      topLeft.toArray(), topRight.toArray(),
+      bottomRight.toArray(), bottomLeft.toArray(),
+      topLeft.toArray()
+    ]]
   };
 }
 

@@ -26,7 +26,7 @@ export function bearing(v0, v1) {
   return radiansToDegrees(Math.atan2(y, x));
 }
 
-let KM_PER_DEGREE = 111.320;
+let KM_PER_DEGREE = 111.11;
 export function metersToDegrees(latitude, meters) {
   return (meters / 1000) / (KM_PER_DEGREE * Math.cos(latitude * (Math.PI / 180)));
 }

@@ -63,6 +63,10 @@ class Vector {
   toString() {
     return "(`this.x`, `this.y`)";
   }
+
+  toArray() {
+    return [this.x, this.y];
+  }
 }
 
 export default Vector;
